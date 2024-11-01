@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 import logging
 import os
 import re
@@ -25,7 +25,7 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 class ArticleRequest(BaseModel):
-    url: str
+    url: HttpUrl
 
 def sanitize_title(title: str) -> str:
     """
