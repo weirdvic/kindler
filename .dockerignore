@@ -1,0 +1,31 @@
+# Exclude Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Exclude virtual environment directories
+venv/
+env/
+
+# Exclude logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Exclude configuration files
+*.env
+*.config
+
+# Exclude documentation files
+docs/
+*.md
+
+# Exclude all files in tests folder
+tests/
+
+# Exclude Docker-related files
+Dockerfile
+.dockerignore
+
+# Exclude any other files or directories as needed
+*.sqlite3
