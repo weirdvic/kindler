@@ -18,3 +18,4 @@ env/
 
 # Exclude any other files or directories as needed
 *.sqlite3
+sends/*
