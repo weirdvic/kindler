@@ -12,13 +12,6 @@ from email.mime.application import MIMEApplication
 from email.utils import formataddr
 from bs4 import BeautifulSoup
 
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = os.getenv("SMTP_PORT", 587)
-EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-KINDLE_EMAIL = os.getenv("KINDLE_EMAIL")
-SENDS_FOLDER = "sends"
-
 app = FastAPI()
 logging.basicConfig(
     level=logging.INFO,
@@ -26,6 +19,28 @@ logging.basicConfig(
 )
 class ArticleRequest(BaseModel):
     url: HttpUrl
+
+SENDS_FOLDER = "sends"
+os.makedirs(SENDS_FOLDER, exist_ok=True)
+
+SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = os.getenv("SMTP_PORT", 587)
+
+EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+KINDLE_EMAIL = os.getenv("KINDLE_EMAIL")
+if not EMAIL_ADDRESS or not EMAIL_PASSWORD or not KINDLE_EMAIL:
+    missing_vars = [
+        var_name for var_name, var_value in {
+            "EMAIL_ADDRESS": EMAIL_ADDRESS,
+            "EMAIL_PASSWORD": EMAIL_PASSWORD,
+            "KINDLE_EMAIL": KINDLE_EMAIL
+        }.items() if var_value is None
+    ]
+    
+    logging.fatal(f"Error: Missing required environment variables: {', '.join(missing_vars)}")
+    exit(1)
+
 
 def sanitize_title(title: str) -> str:
     """
