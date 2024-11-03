@@ -135,13 +135,13 @@ def send_to_kindle(epub_file: str) -> bool:
         epub_file (str): The path to the EPUB file to send
     """
     msg = MIMEMultipart()
-    msg["From"] = formataddr(("Sender Name", EMAIL_ADDRESS))
+    msg["From"] = formataddr((EMAIL_ADDRESS.split("@")[0], EMAIL_ADDRESS))
     msg["To"] = KINDLE_EMAIL
-    msg["Subject"] = "convert"
+    msg["Subject"] = epub_file[:-5]
 
     with open(os.path.join(SENDS_FOLDER, epub_file), "rb") as file:
-        part = MIMEApplication(file.read(), Name=os.path.basename(epub_file))
-    part["Content-Disposition"] = f'attachment; filename="{os.path.basename(epub_file)}"'
+        part = MIMEApplication(file.read(), _subtype="epub+zip", Name=os.path.basename(epub_file))
+        part.add_header('Content-Disposition', 'attachment', filename=os.path.basename(epub_file))
     msg.attach(part)
 
     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
